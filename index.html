@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXIOM: Protocol of Survival</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Load Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Background Video -->
+<div class="fixed inset-0 -z-10 overflow-hidden">
+    <video 
+        autoplay 
+        muted 
+        loop 
+        playsinline
+        class="w-full h-full object-cover">
+        <source src="https://media.istockphoto.com/id/1878863310/video/artificial-intelligence-network-programming-code.mp4?s=mp4-640x640-is&k=20&c=MuI8KQTTVgRjYXbjfpr_8_gJm-wqiEXhA3WminvRzQk=" type="video/mp4">
+    </video>
+
+    <!-- Dark overlay for contrast -->
+    <div class="absolute inset-0 bg-black/60"></div>
+</div>
+
+    
+    <style>
+        /* Custom styles */
+        :root {
+            --axiom-primary: #00f0ff;
+            --axiom-secondary: #7b61ff;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #d1d5db;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .glow {
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+        
+        .crisis-ticker {
+            background: linear-gradient(90deg, transparent, rgba(123, 97, 255, 0.1), transparent);
+            border-top: 1px solid rgba(75, 85, 99, 0.5);
+            border-bottom: 1px solid rgba(75, 85, 99, 0.5);
+        }
+        
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .animate-marquee {
+            display: inline-block;
+            animation: marquee 60s linear infinite;
+        }
+        
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid var(--axiom-primary);
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: 0.15em;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--axiom-primary) }
+        }
+    </style>
+</head>
+<body>
+    <!-- Crisis Ticker -->
+    <div class="crisis-ticker py-3 overflow-hidden">
+        <div class="animate-marquee whitespace-nowrap">
+            <span class="mx-8"><i class="fas fa-triangle-exclamation text-red-500 mr-2"></i>NORTH ATLANTIC GRID: Capacity at 32%</span>
+            <span class="mx-8"><i class="fas fa-vial-circle-exclamation text-yellow-500 mr-2"></i>REGION 7-A: Infection rate accelerating</span>
+            <span class="mx-8"><i class="fas fa-tower-broadcast text-blue-500 mr-2"></i>COMMS NETWORK: Critical nodes failing</span>
+            <span class="mx-8"><i class="fas fa-people-arrows text-green-500 mr-2"></i>AXIOM UNIT: Deploying containment protocols</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="min-h-screen flex flex-col items-center justify-center px-4 py-12">
+        <div class="max-w-4xl text-center">
+            <div class="mb-12">
+                <div class="text-sm tracking-widest mb-6 text-cyan-400 font-mono">[SECURE CHANNEL ESTABLISHED]</div>
+                <h1 class="text-6xl md:text-7xl font-bold mb-6 text-white">
+                    <span class="glow">AXIOM</span>
+                </h1>
+                <div class="typewriter text-2xl md:text-3xl font-light mb-10 max-w-2xl mx-auto">
+                    Protocol of Survival
+                </div>
+                <p class="text-2xl md:text-3xl font-light mb-12 leading-relaxed max-w-3xl mx-auto">
+                    When systems fail, <span class="text-cyan-400 font-medium">logic decides</span> who survives.
+                </p>
+            </div>
+
+            <!-- Recruitment Message -->
+            <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-8 mb-12 text-left max-w-2xl mx-auto">
+                <div class="flex items-start mb-6">
+                    <div class="bg-gray-900 p-3 rounded-lg mr-4">
+                        <i class="fas fa-satellite-dish text-cyan-400 text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-white mb-2">Priority Transmission: Global Response Unit</h3>
+                        <p class="text-gray-300 mb-4">
+                            The cascading crisis has overwhelmed conventional response systems. 
+                            Governments are making decisions based on panic, not data. Every error 
+                            compounds the collapse.
+                        </p>
+                        <p class="text-gray-200">
+                            AXIOM is deploying mathematics as our last strategic weapon. We need analysts 
+                            who can calculate under pressure, predict outcomes, and allocate scarce resources 
+                            with precision.
+                        </p>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 pt-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <div class="p-4 bg-gray-900/50 rounded-lg">
+                            <div class="text-cyan-400 text-2xl font-mono mb-2">55</div>
+                            <div class="text-sm">Critical Decisions</div>
+                        </div>
+                        <div class="p-4 bg-gray-900/50 rounded-lg">
+                            <div class="text-cyan-400 text-2xl font-mono mb-2">11</div>
+                            <div class="text-sm">Crisis Domains</div>
+                        </div>
+                        <div class="p-4 bg-gray-900/50 rounded-lg">
+                            <div class="text-cyan-400 text-2xl font-mono mb-2">3</div>
+                            <div class="text-sm">Escalation Tiers</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- START BUTTON -->
+            <div class="space-y-6">
+                <button onclick="beginProtocol()" 
+                        class="bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-bold text-lg px-12 py-4 rounded-lg hover:opacity-90 transition-transform hover:scale-105 shadow-lg shadow-cyan-500/20">
+                    <i class="fas fa-fingerprint mr-3"></i>Accept Protocol & Deploy
+                </button>
+                <p class="text-gray-500 text-sm max-w-md mx-auto">
+                    Your decisions will affect regional stability metrics in real-time. 
+                    All data is logged to the global crisis network.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="border-t border-gray-900 py-6 text-center text-gray-500 text-sm">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <span class="font-mono">AXIOM v2.7</span> • Global Crisis Response Network
+                </div>
+                <div class="space-x-6">
+                    <span class="text-green-500"><i class="fas fa-circle mr-1"></i> Systems Operational</span>
+                    <span class="text-yellow-500"><i class="fas fa-exclamation-triangle mr-1"></i> Crisis Level: Alpha</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function beginProtocol() {
+            // Initialize game state
+            localStorage.setItem('axiom_player', JSON.stringify({
+                joined: new Date().toISOString(),
+                stability: 100,
+                completedDomains: [],
+                performance: {}
+            }));
+            
+            // Create a simple alert to show it's working
+            alert("Protocol accepted. Initializing crisis response systems...");
+            
+            //In full implementation, this would redirect to world-map.html
+            window.location.href = 'world-map.html';
+            
+            // For now, show a demo message
+            // ''
+            // document.body.innerHTML = `
+            //     <div class="min-h-screen flex items-center justify-center bg-black p-8">
+            //         <div class="text-center max-w-2xl">
+            //             <h2 class="text-4xl font-bold text-cyan-400 mb-6">PROTOCOL ACCEPTED</h2>
+            //             <p class="text-xl text-gray-300 mb-8">
+            //                 You've successfully deployed to the AXIOM network.<br>
+            //                 Next: Access the World Map to begin crisis response.
+            //             </p>
+            //             <div class="bg-gray-900/50 p-6 rounded-xl border border-gray-800">
+            //                 <p class="text-gray-400 mb-4">To build the complete game:</p>
+            //                 <ol class="text-left text-gray-300 list-decimal pl-5 space-y-2">
+            //                     <li>Create <code>world-map.html</code> with the code provided</li>
+            //                     <li>Create <code>styles/global.css</code> for custom styles</li>
+            //                     <li>Create <code>scripts/game-state.js</code> for game logic</li>
+            //                     <li>Link them together and continue!</li>
+            //                 </ol>
+            //             </div>
+            //             <button onclick="location.reload()" class="mt-8 px-6 py-3 bg-gray-800 rounded-lg hover:bg-gray-700">
+            //                 Return to Landing
+            //             </button>
+            //         </div>
+            //     </div>
+            // `;
+            // '''
+        }
+
+        // Marquee animation fix
+        document.addEventListener('DOMContentLoaded', () => {
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes marquee {
+                    0% { transform: translateX(100%); }
+                    100% { transform: translateX(-100%); }
+                }
+                .animate-marquee {
+                    display: inline-block;
+                    animation: marquee 60s linear infinite;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Critical Decision • AXIOM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/global.css">
+    <style>
+        .crisis-panel {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+            border: 1px solid rgba(75, 85, 99, 0.5);
+        }
+        .input-glow:focus {
+            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.1);
+            border-color: #00f0ff;
+        }
+        .option-card {
+            transition: all 0.2s ease;
+            border: 2px solid rgba(75, 85, 99, 0.3);
+        }
+        .option-card:hover {
+            border-color: #00f0ff;
+            background: rgba(0, 240, 255, 0.05);
+        }
+        .option-card.selected {
+            border-color: #00f0ff;
+            background: rgba(0, 240, 255, 0.1);
+        }
+        .outcome-success {
+            border-left-color: #10b981;
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.05), transparent);
+        }
+        .outcome-failure {
+            border-left-color: #ef4444;
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.05), transparent);
+        }
+        .domain-icon {
+            transition: transform 0.3s ease;
+        }
+        .domain-icon.algebra { color: #00f0ff; }
+        .domain-icon.geometry { color: #7b61ff; }
+        .domain-icon.calculus { color: #ff375f; }
+        .domain-icon.number-theory { color: #00d4aa; }
+    </style>
+</head>
+<body class="text-gray-300 min-h-screen bg-gradient-to-br from-gray-950 to-black">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Progress Header -->
+        <header class="mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <a href="mission.html" class="text-gray-400 hover:text-white transition mb-2 inline-block">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Mission
+                    </a>
+                    <div class="flex items-center space-x-4">
+                        <h1 class="text-2xl font-bold text-white" id="questionTitle">Decision Point 01/05</h1>
+                        <span class="px-3 py-1 bg-green-900/50 text-green-400 rounded-full text-sm font-medium" id="domainBadge">Algebra</span>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-gray-400 mb-1">Time Pressure</div>
+                    <div class="text-xl font-mono text-white">
+                        <i class="fas fa-clock mr-2"></i><span id="timer">03:00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="h-2 bg-gray-800 rounded-full overflow-hidden mb-2">
+                <div class="h-full bg-gradient-to-r from-cyan-500 to-blue-500" id="progressBar" style="width: 20%"></div>
+            </div>
+            <div class="flex justify-between text-sm text-gray-400">
+                <span id="progressText">Question 1 of 5</span>
+                <span id="remainingText">4 remaining</span>
+            </div>
+        </header>
+
+        <!-- Advisor Section -->
+        <div class="crisis-panel rounded-xl p-6 mb-8" id="advisorSection">
+            <div class="flex items-start mb-6">
+                <div class="mr-4">
+                    <div class="w-12 h-12 bg-cyan-900/50 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user-md text-xl text-cyan-300" id="advisorIcon"></i>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Advisor Briefing</h3>
+                    <div class="bg-black/30 rounded-lg p-4 mb-4">
+                        <p class="text-gray-300" id="advisorIntro">
+                            "We have 1,247 beds with 82% current occupancy. Each nurse can monitor 8 patients. 
+                            With 312 nurses on shift, what's our maximum patient capacity without exceeding 
+                            nurse-to-patient ratios? I need the <span class="text-cyan-300">exact equation</span>."
+                        </p>
+                    </div>
+                    <div class="border-l-4 border-cyan-500 pl-4" id="theorySection">
+                        <h4 class="font-medium text-white mb-1">THEORY: Capacity Under Constraints</h4>
+                        <p class="text-gray-400 text-sm">
+                            Maximum capacity = min(Total beds, Staff × Patients per staff). 
+                            You're looking for the <span class="font-mono">bottleneck</span>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Crisis Scenario -->
+        <div class="crisis-panel rounded-xl p-6 mb-8">
+            <h3 class="text-xl font-semibold text-white mb-4" id="scenarioTitle">CRISIS SCENARIO: TRIAGE OVERFLOW</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div id="scenarioText">
+                    <p class="text-gray-300 mb-4">
+                        Field Hospital 7-A is receiving casualties from the northern sector collapse. 
+                        Current occupancy: <span class="text-yellow-300 font-mono">1,022 patients</span>. 
+                        Incoming rate: <span class="text-red-300 font-mono">89 patients/hour</span>.
+                    </p>
+                    <p class="text-gray-300" id="questionText">
+                        You must calculate the <span class="text-cyan-300">maximum sustainable patient count</span> 
+                        given our nursing staff constraints. Exceeding this limit will collapse the triage system.
+                    </p>
+                </div>
+                <div class="bg-black/40 border border-gray-800 rounded-lg p-4" id="constraintsContainer">
+                    <h4 class="font-semibold text-white mb-3">CONSTRAINTS</h4>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Total beds available</span>
+                            <span class="font-mono text-white">1,247</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Nurses on shift</span>
+                            <span class="font-mono text-white">312</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Max patients per nurse</span>
+                            <span class="font-mono text-red-300">8</span>
+                        </div>
+                        <div class="border-t border-gray-800 pt-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-400">Current occupancy</span>
+                                <span class="font-mono text-yellow-300">1,022</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Interactive Element -->
+            <div class="bg-black/30 rounded-lg p-5 mb-6">
+                <h4 class="font-semibold text-white mb-4 flex items-center">
+                    <i class="fas fa-calculator mr-2 text-cyan-400"></i>
+                    <span id="interactionTitle">Calculate Maximum Capacity</span>
+                </h4>
+                
+                <!-- Multiple Choice Options -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="optionsContainer">
+                    <!-- Options will be dynamically inserted here -->
+                </div>
+                
+                <!-- Numeric Input (for other question types) -->
+                <div class="mt-6 hidden" id="numericContainer">
+                    <label class="block text-gray-400 mb-2">Enter maximum capacity:</label>
+                    <div class="flex">
+                        <input type="number" class="input-glow flex-1 bg-gray-900 border border-gray-700 rounded-l-lg px-4 py-3 text-white font-mono focus:outline-none">
+                        <button class="bg-gray-800 px-4 rounded-r-lg border border-l-0 border-gray-700 text-gray-400">patients</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decision Controls -->
+        <div class="flex justify-between items-center pt-6 border-t border-gray-800">
+            <button onclick="consultAdvisor()" class="px-6 py-3 border border-gray-700 rounded-lg hover:bg-gray-800/50 transition">
+                <i class="fas fa-life-ring mr-2"></i>Consult Advisor
+            </button>
+            
+            <div class="text-center">
+                <div class="text-gray-400 text-sm mb-2">Submit your decision</div>
+                <button onclick="submitAnswer()" 
+                        class="bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:opacity-90 transition">
+                    <i class="fas fa-paper-plane mr-2"></i>Execute Protocol
+                </button>
+            </div>
+            
+            <div class="text-right">
+                <div class="text-gray-400 text-sm mb-1">Impact Assessment</div>
+                <div class="text-xs text-gray-500">Affects ~1,200+ patients</div>
+            </div>
+        </div>
+
+        <!-- Outcome Panel (Initially Hidden) -->
+        <div id="outcomePanel" class="hidden mt-10">
+            <!-- Outcome content will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- COMPLETE QUESTION ENGINE AND GAME STATE SCRIPT -->
+    <script>
+        // ==================== QUESTION ENGINE ====================
+        class QuestionEngine {
+            constructor() {
+                this.questions = {
+                    'algebra': [
+                        {
+                            id: 1,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Dr. Aris Thorne",
+                                role: "Regional Medical Coordinator",
+                                intro: "We have 1,247 beds with 82% current occupancy. Each nurse can monitor 8 patients. With 312 nurses on shift, what's our maximum patient capacity without exceeding nurse-to-patient ratios?",
+                                theory: "Maximum capacity = min(Total beds, Staff × Patients per staff). You're looking for the bottleneck."
+                            },
+                            scenario: "Field Hospital 7-A is receiving casualties from the northern sector collapse.",
+                            question: "Calculate the maximum sustainable patient count given nursing staff constraints.",
+                            constraints: { beds: 1247, nurses: 312, patientsPerNurse: 8, currentOccupancy: 1022 },
+                            options: ["C = 312 × 8", "C = min(1247, 312 × 8)", "C = 1247 - 1022", "C = 312 × 8 + 1022"],
+                            correctIndex: 1,
+                            explanation: "The bottleneck was nursing staff (312 × 8 = 2,496), not beds (1,247). The minimum function identifies the limiting constraint.",
+                            impact: {
+                                correct: { stability: 8, message: "Capacity correctly calculated. 47 critical patients transferred." },
+                                incorrect: { stability: -12, message: "Over-allocation collapsed nurse-to-patient ratios." }
+                            }
+                        },
+                        {
+                            id: 2,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Logistics Commander Chen",
+                                role: "Supply Chain Director",
+                                intro: "We have 5,000 oxygen cylinders arriving in shipments of 250 each. Daily consumption is 320 cylinders.",
+                                theory: "Total needed = Daily consumption × Days. Shipments = ceil(Total needed / Shipment size)."
+                            },
+                            scenario: "Oxygen supply lines are disrupted. Current stock: 800 cylinders.",
+                            question: "Calculate minimum shipments needed for 14-day supply buffer.",
+                            constraints: { currentStock: 800, dailyConsumption: 320, shipmentSize: 250, daysRequired: 14 },
+                            options: ["ceil((320×14 - 800) ÷ 250)", "floor((320×14) ÷ 250)", "(320×14 + 800) ÷ 250", "ceil(320×14 ÷ 250)"],
+                            correctIndex: 0,
+                            explanation: "Need = (320×14) - 800 = 3,680. Shipments = ceil(3680 ÷ 250) = 15 shipments.",
+                            impact: {
+                                correct: { stability: 7, message: "Supply chain secured. No oxygen shortages." },
+                                incorrect: { stability: -10, message: "Insufficient oxygen. Respiratory ward overwhelmed." }
+                            }
+                        },
+                        {
+                            id: 3,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Engineer Kaito",
+                                role: "Infrastructure Specialist",
+                                intro: "Evacuation center designed for 2,300 people needs water allocation. Each person requires minimum 2L/day.",
+                                theory: "Days supply = Total resource ÷ (Population × Daily need per capita)."
+                            },
+                            scenario: "Municipal water supply failed. Backup tanks at 10,000L capacity.",
+                            question: "Calculate days until water rationing must begin.",
+                            constraints: { population: 2300, dailyNeedPerPerson: 2, totalWater: 10000 },
+                            options: ["10000 ÷ (2300 × 2)", "10000 ÷ 2300", "2300 ÷ (10000 × 2)", "(10000 ÷ 2) × 2300"],
+                            correctIndex: 0,
+                            explanation: "Daily need = 2300 × 2 = 4,600L. Days = 10000 ÷ 4600 ≈ 2.17 days.",
+                            impact: {
+                                correct: { stability: 9, message: "Rationing plan implemented preemptively." },
+                                incorrect: { stability: -15, message: "Water exhausted. Dehydration crisis emerging." }
+                            }
+                        },
+                        {
+                            id: 4,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Transport Director Rivera",
+                                role: "Evacuation Coordinator",
+                                intro: "We have 1,870 civilians to evacuate. Each bus holds 45 people plus 2 staff.",
+                                theory: "Buses needed = ceil(People ÷ Capacity per bus). Account for staff reducing passenger capacity."
+                            },
+                            scenario: "Bridge collapse limits evacuation to single route. Staff must accompany each bus.",
+                            question: "Calculate minimum buses needed for single-trip evacuation.",
+                            constraints: { civilians: 1870, busCapacity: 45, staffPerBus: 2 },
+                            options: ["ceil(1870 ÷ 43)", "ceil(1870 ÷ 45)", "1870 ÷ (45 - 2)", "floor(1870 ÷ 43) + 1"],
+                            correctIndex: 0,
+                            explanation: "Effective capacity = 45 - 2 staff = 43 passengers. Buses = ceil(1870 ÷ 43) = 44 buses.",
+                            impact: {
+                                correct: { stability: 8, message: "Evacuation completed. All civilians transported." },
+                                incorrect: { stability: -14, message: "Insufficient transport. Civilians stranded." }
+                            }
+                        },
+                        {
+                            id: 5,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Power Grid Controller Novak",
+                                role: "Energy Management",
+                                intro: "Main generator uses 8L/hour, backup uses 5L/hour. We have 600L in main tank, 250L in backup.",
+                                theory: "Total hours = Total fuel ÷ Combined consumption rate."
+                            },
+                            scenario: "Grid failure imminent. Peak load requires both generators.",
+                            question: "Calculate maximum hours both generators can run simultaneously.",
+                            constraints: { mainConsumption: 8, backupConsumption: 5, mainFuel: 600, backupFuel: 250 },
+                            options: ["(600 + 250) ÷ (8 + 5)", "600 ÷ 8 + 250 ÷ 5", "min(600÷8, 250÷5)", "(600 + 250) ÷ 8"],
+                            correctIndex: 0,
+                            explanation: "Total fuel = 850L. Combined rate = 13L/hour. Hours = 850 ÷ 13 ≈ 65.4 hours.",
+                            impact: {
+                                correct: { stability: 10, message: "Power management optimized. Critical systems maintained." },
+                                incorrect: { stability: -20, message: "Generator failure. Medical wing blackout." }
+                            }
+                        }
+                    ],
+                    'geometry': [
+                        {
+                            id: 1,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Architect Silva",
+                                role: "Shelter Design Lead",
+                                intro: "Emergency shelter must house 400 people with 4m² minimum per person.",
+                                theory: "Area = length × width. Capacity = Area ÷ space per person."
+                            },
+                            scenario: "Flood evacuation requires rapid shelter setup. Ground uneven, 15% space unusable.",
+                            question: "Calculate maximum people shelter can accommodate (account for unusable space).",
+                            constraints: { length: 40, width: 25, spacePerPerson: 4, unusablePercent: 15 },
+                            options: ["floor((40×25×0.85) ÷ 4)", "ceil((40×25) ÷ 4)", "(40×25) ÷ 4", "floor(40×25 ÷ 4) × 0.85"],
+                            correctIndex: 0,
+                            explanation: "Usable area = 1000 × 0.85 = 850m². Capacity = floor(850 ÷ 4) = 212 people.",
+                            impact: {
+                                correct: { stability: 7, message: "Shelter optimized. No overcrowding violations." },
+                                incorrect: { stability: -11, message: "Overcrowding caused sanitation collapse." }
+                            }
+                        },
+                        {
+                            id: 2,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Search & Rescue Lead Vargas",
+                                role: "Rescue Operations",
+                                intro: "Circular search radius expands at 500m/hour. Starting radius 2km.",
+                                theory: "Radius grows linearly. Area grows quadratically."
+                            },
+                            scenario: "Missing persons in mountainous region. Search window closing due to storm.",
+                            question: "Calculate search area after 3 hours expansion.",
+                            constraints: { initialRadius: 2000, expansionRate: 500, time: 3 },
+                            options: ["π × (2000 + 500×3)²", "π × 2000² + π × (500×3)²", "π × (2000² + 500×3)", "3 × π × 2000²"],
+                            correctIndex: 0,
+                            explanation: "Final radius = 2000 + 500×3 = 3500m. Area = π × 3500² ≈ 38.48 km².",
+                            impact: {
+                                correct: { stability: 8, message: "Search pattern optimized. 12 missing persons located." },
+                                incorrect: { stability: -13, message: "Search area miscalculated. Persons not found." }
+                            }
+                        },
+                        {
+                            id: 3,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Drone Operator Kato",
+                                role: "Aerial Surveillance",
+                                intro: "Triangular quarantine zone has sides 3km, 4km, 5km. Need to place sensors at vertices.",
+                                theory: "Centroid is intersection of medians. In right triangle, centroid coordinates average of vertices."
+                            },
+                            scenario: "Biohazard containment breach. Sensors must cover entire zone.",
+                            question: "Calculate maximum distance from centroid to any vertex.",
+                            constraints: { sideA: 3, sideB: 4, sideC: 5 },
+                            options: ["(2/3) × max(3,4,5)", "average(3,4,5) / 2", "5 / √2", "√(3²+4²)/3"],
+                            correctIndex: 0,
+                            explanation: "Centroid divides median 2:1. Distance = (2/3) × 5 = 3.33km.",
+                            impact: {
+                                correct: { stability: 9, message: "Sensor placement optimal. Full containment achieved." },
+                                incorrect: { stability: -16, message: "Coverage gaps allowed pathogen spread." }
+                            }
+                        },
+                        {
+                            id: 4,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Urban Planner Desai",
+                                role: "Evacuation Route Design",
+                                intro: "Rectangular city block 300m × 400m. Need diagonal escape route across.",
+                                theory: "Diagonal = √(length² + width²). Perimeter route = 2×(length+width)."
+                            },
+                            scenario: "Fire spreading from northwest corner. Evacuees must reach southeast safe zone.",
+                            question: "Calculate distance saved using diagonal vs going around perimeter.",
+                            constraints: { length: 300, width: 400 },
+                            options: ["(300+400) - √(300²+400²)", "√(300²+400²)", "2×(300+400) - √(300²+400²)", "(300+400) - (300+400)/2"],
+                            correctIndex: 2,
+                            explanation: "Perimeter route = 700m. Diagonal = √(90000+160000)=500m. Saved = 200m.",
+                            impact: {
+                                correct: { stability: 7, message: "Evacuation route optimized. All residents cleared." },
+                                incorrect: { stability: -12, message: "Longer routes caused bottleneck. Casualties." }
+                            }
+                        },
+                        {
+                            id: 5,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Water Engineer Schmidt",
+                                role: "Hydration Systems",
+                                intro: "Cylindrical water tank diameter 4m, height 6m. Current water level at 4m.",
+                                theory: "Cylinder volume = πr²h. Partial volume proportional to height."
+                            },
+                            scenario: "Municipal water failure. Tank is primary reserve.",
+                            question: "Calculate remaining water as percentage of total capacity.",
+                            constraints: { diameter: 4, height: 6, currentLevel: 4 },
+                            options: ["(4/6)×100", "(π×2²×4) ÷ (π×2²×6) × 100", "4÷6 × 100", "All of the above"],
+                            correctIndex: 3,
+                            explanation: "Percentage = (current height / total height) × 100 = (4/6)×100 ≈ 66.67%.",
+                            impact: {
+                                correct: { stability: 8, message: "Water reserves accurately assessed. Rationing effective." },
+                                incorrect: { stability: -14, message: "Water overestimated. Rationing failed." }
+                            }
+                        }
+                    ],
+                    'calculus': [
+                        {
+                            id: 1,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Epidemiologist Dr. Zhang",
+                                role: "Infection Rate Analyst",
+                                intro: "Infection spreading at rate I'(t)=0.3t where t in days. Initial cases: 50.",
+                                theory: "Total = Initial + ∫rate dt from 0 to T."
+                            },
+                            scenario: "Novel pathogen outbreak. Growth accelerating linearly.",
+                            question: "Calculate total infected after 7 days.",
+                            constraints: { initial: 50, rateCoefficient: 0.3, time: 7 },
+                            options: ["50 + ∫₀⁷ 0.3t dt", "50 × e^(0.3×7)", "50 + 0.3×7", "50 × (1+0.3)⁷"],
+                            correctIndex: 0,
+                            explanation: "∫0.3t dt = 0.15t². From 0 to 7: 0.15×49=7.35. Total = 57.35 ≈ 57 cases.",
+                            impact: {
+                                correct: { stability: 8, message: "Growth accurately projected. Containment effective." },
+                                incorrect: { stability: -15, message: "Exponential growth assumed. Resources misallocated." }
+                            }
+                        },
+                        {
+                            id: 2,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Resource Economist Petrova",
+                                role: "Supply Optimization",
+                                intro: "Resource consumption R(t)=100e^(0.05t) units/day. Current stock: 5000 units.",
+                                theory: "Solve ∫R(t)dt from 0 to T = Stock."
+                            },
+                            scenario: "Medical supplies depleting. Consumption growing with patient load.",
+                            question: "Find days until stock depletion (nearest whole day).",
+                            constraints: { initialStock: 5000, growthRate: 0.05 },
+                            options: ["Solve: ∫₀ᵀ 100e^(0.05t) dt = 5000", "5000 ÷ 100", "ln(5000/100) ÷ 0.05", "100 × e^(0.05×T) = 5000"],
+                            correctIndex: 0,
+                            explanation: "∫100e^(0.05t)dt = 2000e^(0.05t). Solve e^(0.05T)=3.5 → T=ln(3.5)/0.05≈25 days.",
+                            impact: {
+                                correct: { stability: 9, message: "Consumption timeline accurate. Emergency procurement initiated." },
+                                incorrect: { stability: -18, message: "Stock exhausted day 17. Critical shortages." }
+                            }
+                        },
+                        {
+                            id: 3,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Climate Analyst Rivera",
+                                role: "Environmental Systems",
+                                intro: "Temperature rising at T'(t)=0.2√t °C/day. Current: 22°C.",
+                                theory: "Average = (1/(b-a))∫T'(t)dt from a to b."
+                            },
+                            scenario: "Heat wave intensifying. Cooling systems failing above 28°C.",
+                            question: "Calculate average temperature increase rate over next 9 days.",
+                            constraints: { currentTemp: 22, timePeriod: 9 },
+                            options: ["(1/9)∫₀⁹ 0.2√t dt", "0.2√9", "(0.2√0 + 0.2√9)/2", "0.2 × average(√t)"],
+                            correctIndex: 0,
+                            explanation: "∫0.2√t dt = 0.133t^(3/2). From 0-9: 0.133×27=3.6. Average = 0.4°C/day.",
+                            impact: {
+                                correct: { stability: 7, message: "Heat wave accurately forecasted. Cooling pre-activated." },
+                                incorrect: { stability: -13, message: "Temperature underestimated. Cooling overwhelmed." }
+                            }
+                        },
+                        {
+                            id: 4,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Structural Engineer Chen",
+                                role: "Infrastructure Integrity",
+                                intro: "Bridge stress S(t)=50+3t-0.1t² (t in hours). Failure at S=80.",
+                                theory: "Peak where derivative = 0. S'(t)=0 for maximum."
+                            },
+                            scenario: "Emergency evacuation route bridge deteriorating.",
+                            question: "Find time when stress peaks before reaching failure threshold.",
+                            constraints: { failureThreshold: 80 },
+                            options: ["Solve: 3-0.2t=0", "Solve: 50+3t-0.1t²=80", "Maximum at -b/2a", "Both A and C"],
+                            correctIndex: 3,
+                            explanation: "S'(t)=3-0.2t=0 → t=15 hours. Or vertex at t=-b/2a=15.",
+                            impact: {
+                                correct: { stability: 10, message: "Bridge closure timed perfectly. Alternate routes established." },
+                                incorrect: { stability: -20, message: "Bridge collapsed during evacuation. Casualties." }
+                            }
+                        },
+                        {
+                            id: 5,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Logistics AI Coordinator",
+                                role: "Autonomous Systems",
+                                intro: "Drone delivery efficiency E(v)=v(100-v) where v=speed in km/h.",
+                                theory: "Optimization: find critical points where E'(v)=0."
+                            },
+                            scenario: "Medical supply drones limited by battery.",
+                            question: "Calculate speed that maximizes delivery efficiency.",
+                            constraints: { maxSpeed: 100 },
+                            options: ["Solve: 100-2v=0", "Maximum at vertex: 100/2", "50 km/h", "All of the above"],
+                            correctIndex: 3,
+                            explanation: "E(v)=-v²+100v. Vertex at v=100/2=50. Or E'(v)=100-2v=0 → v=50.",
+                            impact: {
+                                correct: { stability: 8, message: "Drone fleet optimized. Delivery rate increased 38%." },
+                                incorrect: { stability: -14, message: "Inefficient speed. Battery exhausted prematurely." }
+                            }
+                        }
+                    ],
+                    'number-theory': [
+                        {
+                            id: 1,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Cryptographer Vance",
+                                role: "Secure Communications",
+                                intro: "Encryption uses RSA with primes p=17, q=23. What's φ(n) for key generation?",
+                                theory: "φ(n)=(p-1)(q-1) for n=pq with p,q prime."
+                            },
+                            scenario: "Enemy intercepting emergency communications.",
+                            question: "Calculate Euler's totient φ(n) for key generation.",
+                            constraints: { p: 17, q: 23 },
+                            options: ["(17-1)×(23-1)", "16×22", "352", "All of the above"],
+                            correctIndex: 3,
+                            explanation: "φ(n)=(p-1)(q-1)=16×22=352. Essential for RSA key generation.",
+                            impact: {
+                                correct: { stability: 9, message: "Encryption secure. All communications protected." },
+                                incorrect: { stability: -16, message: "Encryption broken. Enemy accessed evacuation plans." }
+                            }
+                        },
+                        {
+                            id: 2,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Network Architect Singh",
+                                role: "Data Integrity",
+                                intro: "Data packets use checksum modulo 97. Packet value 8432.",
+                                theory: "Check digit = value mod m for some modulus m."
+                            },
+                            scenario: "Critical medical data transmission. Corruption rate 3%.",
+                            question: "Calculate check digit for data validation.",
+                            constraints: { packetValue: 8432, modulus: 97 },
+                            options: ["8432 mod 97", "8432 ÷ 97 remainder", "8432 - 97×floor(8432/97)", "All equivalent"],
+                            correctIndex: 3,
+                            explanation: "8432 ÷ 97 = 86 remainder 90. Check digit = 90.",
+                            impact: {
+                                correct: { stability: 7, message: "Data integrity verified. All medical records accurate." },
+                                incorrect: { stability: -12, message: "Data corruption undetected. Medication errors." }
+                            }
+                        },
+                        {
+                            id: 3,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Access Control Manager West",
+                                role: "Security Systems",
+                                intro: "Facility access codes: 6-digit numbers divisible by 13, 17, and 19.",
+                                theory: "Find LCM of requirements, then smallest 6-digit multiple."
+                            },
+                            scenario: "Emergency override codes needed for multiple secure facilities.",
+                            question: "Find smallest 6-digit access code meeting all divisibility rules.",
+                            constraints: { divisors: [13, 17, 19], digitCount: 6 },
+                            options: ["ceil(100000/4199)×4199", "100011", "100776", "Both A and C"],
+                            correctIndex: 3,
+                            explanation: "LCM(13,17,19)=4199. Smallest 6-digit multiple: 4199×24=100776.",
+                            impact: {
+                                correct: { stability: 8, message: "All facilities accessed. Emergency systems activated." },
+                                incorrect: { stability: -14, message: "Access denied at critical facilities. Lockdown failed." }
+                            }
+                        },
+                        {
+                            id: 4,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Quantum Crypto Specialist",
+                                role: "Quantum-Resistant Algorithms",
+                                intro: "Using Chinese Remainder Theorem: x ≡ 2 mod 5, x ≡ 3 mod 7, x ≡ 2 mod 11.",
+                                theory: "CRT solution: x ≡ a mod m, b mod n, c mod p."
+                            },
+                            scenario: "Quantum computer attacking classical encryption.",
+                            question: "Find smallest positive solution to the system of congruences.",
+                            constraints: { moduli: [5, 7, 11] },
+                            options: ["Solve CRT systematically", "233 mod 385", "233", "All indicate solution"],
+                            correctIndex: 3,
+                            explanation: "Solution is x ≡ 233 mod 385. Smallest positive is 233.",
+                            impact: {
+                                correct: { stability: 10, message: "Quantum-resistant encryption deployed. All data secure." },
+                                incorrect: { stability: -22, message: "Encryption broken by quantum attack. All comms compromised." }
+                            }
+                        },
+                        {
+                            id: 5,
+                            type: 'multiple-choice',
+                            advisor: {
+                                name: "Supply Chain Cryptologist",
+                                role: "Authenticated Logistics",
+                                intro: "Verification uses modular exponentiation: 7^d mod 143 = 42.",
+                                theory: "Discrete logarithm problem: find exponent given base, modulus, and result."
+                            },
+                            scenario: "Supply chain authentication tokens compromised.",
+                            question: "Find d such that 7^d mod 143 = 42.",
+                            constraints: { base: 7, modulus: 143, result: 42 },
+                            options: ["Solve discrete log", "Test small exponents", "d=23 works", "Systematic approach"],
+                            correctIndex: 2,
+                            explanation: "Testing shows 7^23 mod 143 = 42. Discrete log solution found.",
+                            impact: {
+                                correct: { stability: 9, message: "Authentication restored. Supply chain secure." },
+                                incorrect: { stability: -17, message: "Authentication failed. Counterfeit supplies entered." }
+                            }
+                        }
+                    ]
+                };
+            }
+            
+            getQuestion(domain, questionNumber) {
+                if (!this.questions[domain] || questionNumber < 1 || questionNumber > this.questions[domain].length) {
+                    return this.getDefaultQuestion();
+                }
+                return this.questions[domain][questionNumber - 1];
+            }
+            
+            getDefaultQuestion() {
+                return {
+                    id: 1,
+                    type: 'multiple-choice',
+                    advisor: { name: "System Advisor", role: "AXIOM Protocol", intro: "Emergency fallback.", theory: "Use mathematical reasoning." },
+                    scenario: "Crisis situation requires immediate analysis.",
+                    question: "Select the most logical solution.",
+                    options: ["Option A", "Option B", "Option C", "Option D"],
+                    correctIndex: 1,
+                    explanation: "Analysis complete.",
+                    impact: { correct: { stability: 5, message: "Fallback successful." }, incorrect: { stability: -10, message: "Fallback failed." } }
+                };
+            }
+            
+            validateAnswer(domain, questionNumber, answer) {
+                const question = this.getQuestion(domain, questionNumber);
+                if (!question) return { correct: false, message: "Question not found" };
+                
+                const isCorrect = (answer === question.correctIndex);
+                
+                return {
+                    correct: isCorrect,
+                    explanation: question.explanation,
+                    impact: isCorrect ? question.impact.correct : question.impact.incorrect,
+                    advisor: question.advisor
+                };
+            }
+        }
+
+        // ==================== GAME STATE ====================
+        // ==================== GAME STATE ====================
+class AxiomGameState {
+    constructor() {
+        this.state = this.loadState();
+    }
+
+    loadState() {
+        const saved = localStorage.getItem('axiom_player');
+        if (saved) return JSON.parse(saved);
+
+        return {
+            joined: new Date().toISOString(),
+            stability: 100, // 0 = collapse, 100 = fully stable
+            completedDomains: [],
+            currentDomain: null,
+            currentQuestion: 1,
+            performance: {},
+            decisions: 0,
+            correctDecisions: 0,
+            totalTime: 0,
+            rank: 'Analyst'
+        };
+    }
+
+    saveState() {
+        localStorage.setItem('axiom_player', JSON.stringify(this.state));
+    }
+
+    recordDecision(questionId, isCorrect, timeSpent, stabilityDelta) {
+        const domain = this.state.currentDomain;
+
+        if (!this.state.performance[domain]) {
+            this.state.performance[domain] = {
+                correct: 0,
+                total: 0,
+                time: 0,
+                questions: {}
+            };
+        }
+
+        // Global stats
+        this.state.decisions++;
+        this.state.totalTime += timeSpent;
+
+        // Domain stats
+        this.state.performance[domain].total++;
+        this.state.performance[domain].time += timeSpent;
+        this.state.performance[domain].questions[questionId] = {
+            correct: isCorrect,
+            timeSpent,
+            timestamp: new Date().toISOString()
+        };
+
+        if (isCorrect) {
+            this.state.correctDecisions++;
+            this.state.performance[domain].correct++;
+        }
+
+        // ✅ SINGLE, CLEAR STABILITY UPDATE
+        // stabilityDelta MUST be a number (e.g. +8 or -12)
+        if (typeof stabilityDelta === 'number') {
+            this.state.stability += stabilityDelta;
+        }
+
+        // Clamp stability between 0 and 100
+        this.state.stability = Math.max(0, Math.min(100, this.state.stability));
+
+        this.updateRank();
+        this.saveState();
+
+        return {
+            stability: this.state.stability,
+            domainAccuracy: this.getDomainAccuracy(domain),
+            globalAccuracy: this.getGlobalAccuracy()
+        };
+    }
+
+    completeDomain(domainId) {
+        if (!this.state.completedDomains.includes(domainId)) {
+            this.state.completedDomains.push(domainId);
+        }
+        this.state.currentDomain = null;
+        this.state.currentQuestion = 1;
+        this.saveState();
+    }
+
+    getDomainAccuracy(domainId) {
+        if (!this.state.performance[domainId]) return 0;
+        const perf = this.state.performance[domainId];
+        return perf.total > 0 ? (perf.correct / perf.total) * 100 : 0;
+    }
+
+    getGlobalAccuracy() {
+        if (this.state.decisions === 0) return 0;
+        return (this.state.correctDecisions / this.state.decisions) * 100;
+    }
+
+    updateRank() {
+        const accuracy = this.getGlobalAccuracy();
+        const domainsCompleted = this.state.completedDomains.length;
+
+        let newRank = 'Analyst';
+        if (domainsCompleted >= 11 && accuracy >= 90) newRank = 'Architect';
+        else if (domainsCompleted >= 8 && accuracy >= 80) newRank = 'Strategist';
+        else if (domainsCompleted >= 5 && accuracy >= 70) newRank = 'Coordinator';
+        else if (domainsCompleted >= 2 && accuracy >= 60) newRank = 'Specialist';
+
+        this.state.rank = newRank;
+    }
+}
+
+
+        // ==================== MAIN GAME LOGIC ====================
+        window.questionEngine = new QuestionEngine();
+        window.axiomGame = new AxiomGameState();
+        
+        let selectedOption = null;
+        let timeLeft = 180;
+        let currentQuestion = null;
+        let timerInterval = null;
+        let questionStartTime = Date.now();
+        
+        function loadQuestion() {
+            const domain = localStorage.getItem('current_domain') || 'algebra';
+            const questionNum = parseInt(localStorage.getItem('current_question') || 1);
+            
+            // Update game state
+            window.axiomGame.state.currentDomain = domain;
+            window.axiomGame.state.currentQuestion = questionNum;
+            window.axiomGame.saveState();
+            
+            // Load question
+            currentQuestion = window.questionEngine.getQuestion(domain, questionNum);
+            
+            // Update UI
+            updateQuestionUI(currentQuestion, questionNum);
+            
+            // Start timer
+            startTimer(180);
+        }
+        
+        function updateQuestionUI(question, questionNum) {
+            // Update progress
+            document.getElementById('questionTitle').textContent = `Decision Point ${questionNum}/05`;
+            document.getElementById('progressText').textContent = `Question ${questionNum} of 5`;
+            document.getElementById('remainingText').textContent = `${5 - questionNum} remaining`;
+            document.getElementById('progressBar').style.width = `${(questionNum / 5) * 100}%`;
+            
+            // Update domain badge
+            const domain = localStorage.getItem('current_domain') || 'algebra';
+            const domainColors = {
+                'algebra': 'green', 'geometry': 'blue', 'calculus': 'purple', 
+                'number-theory': 'cyan', 'probability': 'yellow', 'discrete-math': 'indigo',
+                'trigonometry': 'pink', 'logic': 'orange', 'applied-math': 'teal',
+                'differential-equations': 'red', 'combinatorics': 'amber'
+            };
+            const color = domainColors[domain] || 'green';
+            document.getElementById('domainBadge').className = `px-3 py-1 bg-${color}-900/50 text-${color}-400 rounded-full text-sm font-medium`;
+            document.getElementById('domainBadge').textContent = domain.charAt(0).toUpperCase() + domain.slice(1).replace('-', ' ');
+            
+            // Update advisor
+            document.getElementById('advisorIntro').innerHTML = `"${question.advisor.intro}"`;
+            document.getElementById('theorySection').innerHTML = `
+                <h4 class="font-medium text-white mb-1">THEORY: ${question.advisor.name.split(' ')[1]}'s Principle</h4>
+                <p class="text-gray-400 text-sm">${question.advisor.theory}</p>
+            `;
+            
+            // Update scenario
+            document.getElementById('scenarioTitle').textContent = `CRISIS SCENARIO: ${domain.toUpperCase()} CRISIS`;
+            document.getElementById('scenarioText').innerHTML = `
+                <p class="text-gray-300 mb-4">${question.scenario}</p>
+                <p class="text-gray-300">${question.question}</p>
+            `;
+            
+            // Update constraints
+            const constraintsContainer = document.getElementById('constraintsContainer');
+            if (question.constraints) {
+                let constraintsHTML = '<h4 class="font-semibold text-white mb-3">CONSTRAINTS</h4><div class="space-y-3">';
+                for (const [key, value] of Object.entries(question.constraints)) {
+                    const formattedKey = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+                    constraintsHTML += `
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">${formattedKey}</span>
+                            <span class="font-mono text-white">${value}</span>
+                        </div>
+                    `;
+                }
+                constraintsHTML += '</div>';
+                constraintsContainer.innerHTML = constraintsHTML;
+            }
+            
+            // Update options
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option-card rounded-lg p-4 cursor-pointer';
+                optionDiv.onclick = () => selectOption(index);
+                optionDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full border-2 border-gray-600 flex items-center justify-center mr-3 option-radio">
+                            <div class="w-4 h-4 rounded-full bg-transparent"></div>
+                        </div>
+                        <div>
+                            <div class="font-mono text-white mb-1">${option}</div>
+                            <div class="text-gray-400 text-sm">Select this answer</div>
+                        </div>
+                    </div>
+                `;
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            questionStartTime = Date.now();
+        }
+        
+        function selectOption(index) {
+            selectedOption = index;
+            
+            document.querySelectorAll('.option-card').forEach((card, i) => {
+                card.classList.remove('selected');
+                const radio = card.querySelector('.option-radio > div');
+                radio.classList.remove('bg-cyan-500');
+                
+                if (i === index) {
+                    card.classList.add('selected');
+                    radio.classList.add('bg-cyan-500');
+                }
+            });
+        }
+        
+        function consultAdvisor() {
+            if (currentQuestion && currentQuestion.advisor) {
+                alert(`ADVISOR FEEDBACK:\n\n${currentQuestion.advisor.theory}\n\n${currentQuestion.explanation}`);
+            } else {
+                alert("Advisor: Analyze all constraints before deciding. Consider multiple approaches.");
+            }
+        }
+        
+        function startTimer(seconds) {
+            timeLeft = seconds;
+            clearInterval(timerInterval);
+            
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time's up! The crisis has escalated due to delayed response.");
+                    submitAnswer();
+                }
+            }, 1000);
+        }
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function submitAnswer() {
+            if (selectedOption === null) {
+                alert("Please select an option before submitting.");
+                return;
+            }
+            
+            const timeSpent = Math.floor((Date.now() - questionStartTime) / 1000);
+            const domain = localStorage.getItem('current_domain') || 'algebra';
+            const questionNum = parseInt(localStorage.getItem('current_question') || 1);
+            
+            const validation = window.questionEngine.validateAnswer(domain, questionNum, selectedOption);
+            const isCorrect = validation.correct;
+            
+            // Record decision
+            const impactValue = isCorrect ? validation.impact.stability : -Math.abs(validation.impact.stability);
+            const result = window.axiomGame.recordDecision(questionNum, isCorrect, timeSpent, impactValue);
+            
+            // Show outcome
+            document.getElementById('outcomePanel').classList.remove('hidden');
+            clearInterval(timerInterval);
+            
+            updateOutcomePanel(isCorrect, validation, result);
+        }
+        
+        function updateOutcomePanel(isCorrect, validation, gameStateResult) {
+            const outcomePanel = document.getElementById('outcomePanel');
+            
+            if (isCorrect) {
+                outcomePanel.innerHTML = `
+                    <div class="outcome-success rounded-xl p-6 border-l-4 mb-8">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-green-900/50 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-check-circle text-2xl text-green-400"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white">Protocol Executed Successfully</h3>
+                                <p class="text-green-400">${validation.impact.message}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <h4 class="font-semibold text-white mb-3">QUANTITATIVE IMPACT</h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Regional stability</span>
+                                        <span class="font-mono text-green-400">+${validation.impact.stability}%</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Global stability</span>
+                                        <span class="font-mono text-white">${gameStateResult.stability}%</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Decision accuracy</span>
+                                        <span class="font-mono text-white">${gameStateResult.globalAccuracy.toFixed(1)}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white mb-3">HUMAN CONSEQUENCE</h4>
+                                <div class="bg-black/30 rounded-lg p-4">
+                                    <p class="text-gray-300 text-sm">${validation.impact.message}</p>
+                                    <p class="text-green-400 text-sm mt-3 text-right">- ${currentQuestion.advisor.name}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-gray-800 pt-6">
+                            <h4 class="font-semibold text-white mb-3">ANALYTICAL FEEDBACK</h4>
+                            <div class="bg-black/40 rounded-lg p-4">
+                                <p class="text-gray-300">${validation.explanation}</p>
+                                <div class="mt-4 flex items-center text-sm text-cyan-400">
+                                    <i class="fas fa-lightbulb mr-2"></i>
+                                    <span>Key insight: ${currentQuestion.advisor.theory.split('.')[0]}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button onclick="nextQuestion()" 
+                                class="bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold px-10 py-4 rounded-lg hover:opacity-90 transition text-lg">
+                            <i class="fas fa-forward mr-2"></i>Proceed to Decision Point ${parseInt(localStorage.getItem('current_question')) + 1 || 2}
+                        </button>
+                        <p class="text-gray-500 text-sm mt-3">${5 - (parseInt(localStorage.getItem('current_question')) || 1)} critical decisions remaining</p>
+                    </div>
+                `;
+            } else {
+                outcomePanel.innerHTML = `
+                    <div class="outcome-failure rounded-xl p-6 border-l-4 mb-8">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-red-900/50 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-times-circle text-2xl text-red-400"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white">Protocol Failure</h3>
+                                <p class="text-red-400">${validation.impact.message}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <h4 class="font-semibold text-white mb-3">QUANTITATIVE IMPACT</h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Regional stability</span>
+                                        <span class="font-mono text-red-400">${validation.impact.stability}%</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Global stability</span>
+                                        <span class="font-mono text-white">${gameStateResult.stability}%</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Decision accuracy</span>
+                                        <span class="font-mono text-white">${gameStateResult.globalAccuracy.toFixed(1)}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white mb-3">HUMAN CONSEQUENCE</h4>
+                                <div class="bg-black/30 rounded-lg p-4">
+                                    <p class="text-gray-300 text-sm">${validation.impact.message}</p>
+                                    <p class="text-red-400 text-sm mt-3 text-right">- ${currentQuestion.advisor.name}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-gray-800 pt-6">
+                            <h4 class="font-semibold text-white mb-3">ANALYTICAL FEEDBACK</h4>
+                            <div class="bg-black/40 rounded-lg p-4">
+                                <p class="text-gray-300">${validation.explanation}</p>
+                                <div class="mt-4 flex items-center text-sm text-cyan-400">
+                                    <i class="fas fa-lightbulb mr-2"></i>
+                                    <span>Key insight: ${currentQuestion.advisor.theory.split('.')[0]}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="space-y-4">
+                            <button onclick="nextQuestion()" 
+                                    class="bg-gradient-to-r from-yellow-600 to-orange-600 text-white font-semibold px-10 py-4 rounded-lg hover:opacity-90 transition text-lg">
+                                <i class="fas fa-forward mr-2"></i>Continue to Next Decision
+                            </button>
+                            <div class="flex justify-center space-x-4">
+                                <button onclick="resetQuestion()" 
+                                        class="px-6 py-2 bg-gray-800 rounded-lg hover:bg-gray-700">
+                                    <i class="fas fa-redo mr-2"></i>Try This Question Again
+                                </button>
+                                <button onclick="consultAdvisor()" 
+                                        class="px-6 py-2 bg-cyan-800 rounded-lg hover:bg-cyan-700">
+                                    <i class="fas fa-graduation-cap mr-2"></i>Learn Solution
+                                </button>
+                            </div>
+                            <p class="text-gray-500 text-sm mt-3">
+                                Stability: ${gameStateResult.stability}% | Accuracy: ${gameStateResult.globalAccuracy.toFixed(1)}%
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        function resetQuestion() {
+            selectedOption = null;
+            document.querySelectorAll('.option-card').forEach((card, i) => {
+                card.classList.remove('selected');
+                const radio = card.querySelector('.option-radio > div');
+                radio.classList.remove('bg-cyan-500');
+            });
+            document.getElementById('outcomePanel').classList.add('hidden');
+            questionStartTime = Date.now();
+            startTimer(180);
+        }
+        
+        function nextQuestion() {
+            const nextQuestionNum = parseInt(localStorage.getItem('current_question') || 1) + 1;
+            
+            if (nextQuestionNum > 5) {
+                // Domain completed
+                const domain = localStorage.getItem('current_domain');
+                window.axiomGame.completeDomain(domain);
+                window.location.href = 'crisis-report.html';
+            } else {
+                localStorage.setItem('current_question', nextQuestionNum);
+                window.location.reload();
+            }
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadQuestion);
+    </script>
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Briefing • AXIOM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/global.css">
+    <style>
+        .advisor-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+            border-left: 4px solid #00f0ff;
+        }
+        .question-card {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+        .question-card:hover {
+            border-color: #00f0ff;
+            transform: translateY(-2px);
+        }
+        .question-card.completed {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
+        }
+        .question-card.current {
+            border-color: #00f0ff;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+        }
+        .type-tag {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(30, 41, 59, 0.8);
+        }
+    </style>
+</head>
+<body class="text-gray-300 min-h-screen bg-gradient-to-br from-gray-950 to-black">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Mission Header -->
+        <header class="mb-10">
+            <div class="flex justify-between items-start mb-8">
+                <div>
+                    <a href="world-map.html" class="text-gray-400 hover:text-white transition mb-4 inline-block">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Global Map
+                    </a>
+                    <h1 class="text-4xl font-bold text-white mb-2" id="domainTitle">Algebra Protocols</h1>
+                    <div class="flex items-center space-x-4">
+                        <span class="px-3 py-1" id="crisisBadge">🟢 EASY CRISIS</span>
+                        <span class="text-gray-400"><i class="fas fa-clock mr-1"></i> <span id="timeEstimate">12-18 minutes</span></span>
+                        <span class="text-gray-400"><i class="fas fa-brain mr-1"></i> 5 critical decisions</span>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-gray-400 mb-1">Crisis Severity</div>
+                    <div class="text-3xl font-bold" id="severityLevel">LOW</div>
+                </div>
+            </div>
+
+            <!-- Crisis Context -->
+            <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-6 mb-8">
+                <h3 class="text-xl font-semibold text-white mb-4" id="situationTitle">SITUATION REPORT: REGION 7-A</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div id="crisisDescription">
+                        <p class="text-gray-300 mb-4 leading-relaxed">
+                            Regional hospitals are at breaking point. Incoming patient rates exceed discharge rates by 
+                            <span class="text-yellow-300 font-medium">47%</span>. Medical supply chains are disrupted. 
+                            Without immediate mathematical intervention, triage systems will fail within hours.
+                        </p>
+                        <p class="text-gray-400 text-sm">
+                            <i class="fas fa-triangle-exclamation text-yellow-500 mr-2"></i>
+                            This is a <span class="font-medium">resource balancing</span> crisis. You must allocate beds, 
+                            staff, and supplies using linear equations.
+                        </p>
+                    </div>
+                    <div class="bg-black/30 border border-gray-800 rounded-lg p-4" id="parametersContainer">
+                        <h4 class="font-semibold text-white mb-3">CRITICAL PARAMETERS</h4>
+                        <div class="space-y-3" id="parametersList">
+                            <!-- Parameters will be filled dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Advisor Briefing -->
+        <div class="advisor-card rounded-xl p-6 mb-10" id="advisorContainer">
+            <div class="flex items-start">
+                <div class="mr-6">
+                    <div class="w-20 h-20 bg-gradient-to-br from-cyan-900 to-blue-900 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user-md text-3xl text-cyan-300" id="advisorIcon"></i>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-2xl font-semibold text-white" id="advisorName">Dr. Aris Thorne</h3>
+                            <p class="text-cyan-300" id="advisorRole">Regional Medical Coordinator • Ground Operations</p>
+                        </div>
+                        <div class="text-gray-400 text-sm">
+                            <i class="fas fa-location-dot mr-1"></i><span id="advisorLocation">Field Hospital 7-A</span>
+                        </div>
+                    </div>
+                    <div class="bg-black/30 rounded-lg p-5 mb-4">
+                        <p class="text-gray-300 leading-relaxed" id="advisorQuote">
+                            <i class="fas fa-quote-left text-cyan-500/50 mr-2"></i>
+                            We're managing triage with pen and paper here. Every bed counts. 
+                            I need you to solve the capacity equations faster than this crisis spreads. 
+                            Show me the numbers that keep people alive.
+                            <i class="fas fa-quote-right text-cyan-500/50 ml-2"></i>
+                        </p>
+                    </div>
+                    <div class="border-l-4 border-cyan-500 pl-4">
+                        <h4 class="font-semibold text-white mb-2" id="advisorNoteTitle">ADVISOR NOTE: Resource Equations</h4>
+                        <p class="text-gray-400 text-sm" id="advisorNote">
+                            Hospital capacity follows <span class="text-cyan-300 font-mono">C = B × U × T</span> where B=beds, 
+                            U=utilization rate, T=staff multiplier. You'll be balancing these variables under constraints.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Questions Timeline -->
+        <div class="mb-12">
+            <h3 class="text-2xl font-semibold text-white mb-6">Critical Decision Points</h3>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4" id="questionsContainer">
+                <!-- Questions will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Mission Controls -->
+        <div class="border-t border-gray-800 pt-8 flex justify-between items-center">
+            <div>
+                <div class="text-gray-400 text-sm mb-2">Ready to deploy?</div>
+                <button onclick="startQuestion(1)" 
+                        class="bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:opacity-90 transition">
+                    <i class="fas fa-play mr-2"></i>Begin First Decision
+                </button>
+            </div>
+            <div class="text-right">
+                <div class="text-gray-400 text-sm mb-1">AXIOM Protocol 2.7.3</div>
+                <div class="text-xs text-gray-500">All decisions are logged and irreversible</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Domain configuration data
+        const domainData = {
+            algebra: {
+                title: "Algebra Protocols",
+                advisor: "Dr. Aris Thorne",
+                role: "Regional Medical Coordinator",
+                location: "Field Hospital 7-A",
+                quote: "We're managing triage with pen and paper here. Every bed counts. I need you to solve the capacity equations faster than this crisis spreads. Show me the numbers that keep people alive.",
+                note: "Hospital capacity follows <span class='text-cyan-300 font-mono'>C = B × U × T</span> where B=beds, U=utilization rate, T=staff multiplier. You'll be balancing these variables under constraints.",
+                icon: "fa-user-md",
+                color: "green",
+                badge: "🟢 EASY CRISIS",
+                severity: "LOW",
+                severityColor: "text-green-400",
+                time: "12-18 minutes",
+                situation: "SITUATION REPORT: REGION 7-A",
+                description: "Regional hospitals are at breaking point. Incoming patient rates exceed discharge rates by <span class='text-yellow-300 font-medium'>47%</span>. Medical supply chains are disrupted. Without immediate mathematical intervention, triage systems will fail within hours.",
+                crisisType: "This is a <span class='font-medium'>resource balancing</span> crisis. You must allocate beds, staff, and supplies using linear equations.",
+                parameters: [
+                    { label: "Available beds", value: "1,247" },
+                    { label: "Incoming patients/hr", value: "+89", color: "text-red-400" },
+                    { label: "Discharge rate/hr", value: "-61", color: "text-green-400" },
+                    { label: "Time to collapse", value: "~4.3 hours", color: "text-yellow-400" }
+                ]
+            },
+            geometry: {
+                title: "Geometry Operations",
+                advisor: "Architect Silva",
+                role: "Shelter Design Lead",
+                location: "Evacuation Zone 12-B",
+                quote: "We're designing emergency shelters with limited materials. Every square meter counts. I need geometric calculations for maximum occupancy while maintaining safety buffers.",
+                note: "Area optimization follows <span class='text-cyan-300 font-mono'>A = L × W</span> with constraints. You'll be calculating capacities, distances, and coverage areas.",
+                icon: "fa-ruler-combined",
+                color: "blue",
+                badge: "🟢 EASY CRISIS",
+                severity: "LOW",
+                severityColor: "text-green-400",
+                time: "10-15 minutes",
+                situation: "SITUATION REPORT: FLOOD ZONE 12-B",
+                description: "Flash floods have displaced 2,300 people. Available shelter space is limited and terrain restricts construction. Without proper geometric planning, overcrowding will cause sanitation collapse.",
+                crisisType: "This is a <span class='font-medium'>spatial optimization</span> crisis. You must calculate areas, distances, and capacities for emergency shelters.",
+                parameters: [
+                    { label: "Displaced population", value: "2,300" },
+                    { label: "Available land area", value: "10,000 m²" },
+                    { label: "Min. space per person", value: "4 m²", color: "text-yellow-400" },
+                    { label: "Unusable terrain", value: "15%", color: "text-red-400" }
+                ]
+            },
+            calculus: {
+                title: "Calculus Response",
+                advisor: "Epidemiologist Dr. Zhang",
+                role: "Infection Rate Analyst",
+                location: "Bio-Containment Unit",
+                quote: "The infection rate is accelerating non-linearly. We need to model growth patterns to predict resource needs. Your differential calculations will determine quarantine protocols.",
+                note: "Rate of change analysis uses <span class='text-cyan-300 font-mono'>dP/dt = f(t)</span>. You'll be integrating rates and finding maxima/minima for critical decisions.",
+                icon: "fa-chart-line",
+                color: "purple",
+                badge: "🟢 EASY CRISIS",
+                severity: "MODERATE",
+                severityColor: "text-yellow-400",
+                time: "15-20 minutes",
+                situation: "SITUATION REPORT: PATHOGEN OUTBREAK",
+                description: "Novel pathogen spreading with accelerating infection rate. Healthcare capacity thresholds will be breached in days without accurate growth modeling.",
+                crisisType: "This is a <span class='font-medium'>rate of change</span> crisis. You must analyze derivatives and integrals to predict system behavior.",
+                parameters: [
+                    { label: "Initial cases", value: "50" },
+                    { label: "Growth coefficient", value: "0.3/day" },
+                    { label: "Healthcare capacity", value: "500 beds" },
+                    { label: "Critical threshold", value: "72 hours", color: "text-red-400" }
+                ]
+            },
+            'number-theory': {
+                title: "Number Theory Protocols",
+                advisor: "Cryptographer Vance",
+                role: "Secure Communications",
+                location: "AXIOM Command Center",
+                quote: "Enemy forces are intercepting our communications. We need to regenerate encryption keys using prime factorization and modular arithmetic. Every bit of security matters.",
+                note: "Encryption relies on <span class='text-cyan-300 font-mono'>modular arithmetic</span> and prime properties. You'll be calculating totients, modular inverses, and solving congruences.",
+                icon: "fa-lock",
+                color: "cyan",
+                badge: "🟢 EASY CRISIS",
+                severity: "HIGH",
+                severityColor: "text-red-400",
+                time: "18-25 minutes",
+                situation: "SITUATION REPORT: COMMUNICATIONS BREACH",
+                description: "Enemy cryptanalysis has compromised 40% of secure channels. Without immediate key regeneration using number theory, all command communications will be intercepted.",
+                crisisType: "This is a <span class='font-medium'>cryptographic security</span> crisis. You must apply number theory to secure communications.",
+                parameters: [
+                    { label: "Compromised channels", value: "40%" },
+                    { label: "Prime number range", value: "100-1000" },
+                    { label: "Encryption modulus", value: "RSA-1024" },
+                    { label: "Time to full breach", value: "~6 hours", color: "text-red-400" }
+                ]
+            }
+        };
+
+        // Question templates for each domain
+        const questionTemplates = {
+            algebra: [
+                { title: "Bed Allocation Formula", desc: "Calculate maximum occupancy under staff constraints", type: "Multiple Choice", time: "~2 min" },
+                { title: "Supply Chain Equations", desc: "Balance oxygen supply with consumption rates", type: "Multiple Choice", time: "~3 min" },
+                { title: "Water Rationing Model", desc: "Calculate days until rationing needed", type: "Multiple Choice", time: "~2 min" },
+                { title: "Evacuation Transport", desc: "Optimize bus allocation for evacuation", type: "Multiple Choice", time: "~3 min" },
+                { title: "Generator Fuel Optimization", desc: "Calculate maximum runtime with dual generators", type: "Multiple Choice", time: "~4 min" }
+            ],
+            geometry: [
+                { title: "Shelter Capacity", desc: "Calculate maximum occupancy with space constraints", type: "Multiple Choice", time: "~2 min" },
+                { title: "Search Area Expansion", desc: "Model circular search radius growth", type: "Multiple Choice", time: "~3 min" },
+                { title: "Quarantine Zone Coverage", desc: "Place sensors in triangular zone", type: "Multiple Choice", time: "~2 min" },
+                { title: "Evacuation Route Planning", desc: "Calculate diagonal vs perimeter distances", type: "Multiple Choice", time: "~3 min" },
+                { title: "Water Tank Analysis", desc: "Calculate remaining water percentage", type: "Multiple Choice", time: "~2 min" }
+            ],
+            calculus: [
+                { title: "Infection Growth Model", desc: "Calculate total infected using integration", type: "Multiple Choice", time: "~3 min" },
+                { title: "Resource Depletion Timeline", desc: "Find when supplies run out", type: "Multiple Choice", time: "~4 min" },
+                { title: "Temperature Rate Analysis", desc: "Calculate average temperature increase", type: "Multiple Choice", time: "~3 min" },
+                { title: "Structural Stress Peak", desc: "Find maximum stress before failure", type: "Multiple Choice", time: "~3 min" },
+                { title: "Drone Delivery Optimization", desc: "Find speed for maximum efficiency", type: "Multiple Choice", time: "~2 min" }
+            ],
+            'number-theory': [
+                { title: "RSA Key Generation", desc: "Calculate Euler's totient for encryption", type: "Multiple Choice", time: "~3 min" },
+                { title: "Data Integrity Check", desc: "Calculate checksum digits", type: "Multiple Choice", time: "~2 min" },
+                { title: "Access Code Generation", desc: "Find smallest valid access code", type: "Multiple Choice", time: "~4 min" },
+                { title: "Chinese Remainder Solution", desc: "Solve system of congruences", type: "Multiple Choice", time: "~3 min" },
+                { title: "Discrete Logarithm", desc: "Find exponent for modular equation", type: "Multiple Choice", time: "~4 min" }
+            ]
+        };
+
+        function startQuestion(questionNumber) {
+            localStorage.setItem('current_question', questionNumber);
+            window.location.href = 'question.html';
+        }
+
+        function loadDomainData() {
+            const domain = localStorage.getItem('current_domain') || 'algebra';
+            const data = domainData[domain] || domainData.algebra;
+            const questions = questionTemplates[domain] || questionTemplates.algebra;
+            
+            // Update page title
+            document.getElementById('domainTitle').textContent = data.title;
+            
+            // Update crisis badge
+            const badge = document.getElementById('crisisBadge');
+            badge.className = `px-3 py-1 bg-${data.color}-900/50 text-${data.color}-400 rounded-full text-sm font-medium`;
+            badge.textContent = data.badge;
+            
+            // Update severity
+            document.getElementById('severityLevel').textContent = data.severity;
+            document.getElementById('severityLevel').className = `text-3xl font-bold ${data.severityColor}`;
+            
+            // Update time estimate
+            document.getElementById('timeEstimate').textContent = data.time;
+            
+            // Update situation
+            document.getElementById('situationTitle').textContent = data.situation;
+            
+            // Update description
+            document.getElementById('crisisDescription').innerHTML = `
+                <p class="text-gray-300 mb-4 leading-relaxed">${data.description}</p>
+                <p class="text-gray-400 text-sm">
+                    <i class="fas fa-triangle-exclamation text-yellow-500 mr-2"></i>
+                    ${data.crisisType}
+                </p>
+            `;
+            
+            // Update parameters
+            const paramsList = document.getElementById('parametersList');
+            paramsList.innerHTML = '';
+            data.parameters.forEach(param => {
+                const color = param.color || 'text-white';
+                paramsList.innerHTML += `
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">${param.label}</span>
+                        <span class="font-mono ${color}">${param.value}</span>
+                    </div>
+                `;
+            });
+            
+            // Update advisor
+            document.getElementById('advisorName').textContent = data.advisor;
+            document.getElementById('advisorRole').textContent = data.role;
+            document.getElementById('advisorLocation').textContent = data.location;
+            document.getElementById('advisorQuote').innerHTML = `
+                <i class="fas fa-quote-left text-cyan-500/50 mr-2"></i>
+                ${data.quote}
+                <i class="fas fa-quote-right text-cyan-500/50 ml-2"></i>
+            `;
+            document.getElementById('advisorNoteTitle').textContent = `ADVISOR NOTE: ${data.title.split(' ')[0]} Principles`;
+            document.getElementById('advisorNote').innerHTML = data.note;
+            document.getElementById('advisorIcon').className = `fas ${data.icon} text-3xl text-cyan-300`;
+            
+            // Update questions
+            const questionsContainer = document.getElementById('questionsContainer');
+            questionsContainer.innerHTML = '';
+            
+            // Get completed questions for this domain
+            const gameState = JSON.parse(localStorage.getItem('axiom_player') || '{}');
+            const domainPerformance = gameState.performance?.[domain] || {};
+            const completedQuestions = domainPerformance.questions ? Object.keys(domainPerformance.questions).map(Number) : [];
+            
+            questions.forEach((q, index) => {
+                const questionNum = index + 1;
+                const isCompleted = completedQuestions.includes(questionNum);
+                const isCurrent = questionNum === (gameState.currentQuestion || 1);
+                
+                let cardClass = 'question-card rounded-xl p-5 cursor-pointer';
+                if (isCompleted) cardClass += ' completed';
+                if (isCurrent) cardClass += ' current';
+                
+                questionsContainer.innerHTML += `
+                    <div class="${cardClass}" onclick="startQuestion(${questionNum})">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="text-2xl font-bold ${isCompleted ? 'text-green-400' : 'text-white'}">${questionNum.toString().padStart(2, '0')}</div>
+                            <div class="${isCompleted ? 'text-green-400' : 'text-cyan-400'}">
+                                <i class="fas ${isCompleted ? 'fa-check-circle' : 'fa-play-circle'} text-xl"></i>
+                            </div>
+                        </div>
+                        <h4 class="font-semibold text-white mb-3">${q.title}</h4>
+                        <p class="text-gray-400 text-sm mb-4">${q.desc}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="type-tag border border-gray-700">${q.type}</span>
+                            <span class="text-xs text-gray-500">${q.time}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadDomainData);
+    </script>
+</body>
+</html>

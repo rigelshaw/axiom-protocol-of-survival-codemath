@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crisis Report • AXIOM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/global.css">
+    <style>
+        .final-stats {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
+            border: 1px solid rgba(0, 240, 255, 0.3);
+        }
+        .region-card.saved {
+            border-color: #10b981;
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.05), transparent);
+        }
+        .region-card.lost {
+            border-color: #ef4444;
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.05), transparent);
+        }
+        .rank-badge {
+            background: linear-gradient(135deg, #7b61ff, #00f0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            transition: width 1s ease;
+        }
+    </style>
+</head>
+<body class="text-gray-300 min-h-screen bg-gradient-to-br from-black to-gray-950">
+    <div class="container mx-auto px-4 py-12 max-w-5xl">
+        <!-- Header -->
+        <header class="text-center mb-16 animate-fade-in-up" style="animation-delay: 0.2s">
+            <div class="text-sm font-mono text-cyan-400 tracking-widest mb-4">[MISSION COMPLETE]</div>
+            <h1 class="text-5xl font-bold text-white mb-6">Crisis Assessment Report</h1>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                Final analysis of mathematical intervention during global cascading failure
+            </p>
+        </header>
+
+        <!-- Final Stats -->
+        <div class="final-stats rounded-2xl p-8 mb-12 animate-fade-in-up" style="animation-delay: 0.4s">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-white mb-3 rank-badge" id="finalRank">Analyst</div>
+                    <div class="text-gray-400">Final Clearance Level</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-white mb-3" id="finalStability">100%</div>
+                    <div class="text-gray-400">Global Stability Preserved</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-white mb-3" id="finalAccuracy">0%</div>
+                    <div class="text-gray-400">Decision Accuracy</div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8">
+                <h3 class="text-2xl font-semibold text-white mb-6">Operational Metrics</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="metricsContainer">
+                    <!-- Metrics will be filled dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Regional Impact -->
+        <div class="mb-12 animate-fade-in-up" style="animation-delay: 0.6s" id="regionalImpact">
+            <!-- Regional impact will be filled dynamically -->
+        </div>
+
+        <!-- Domain Performance -->
+        <div class="mb-12 animate-fade-in-up" style="animation-delay: 0.8s">
+            <h3 class="text-2xl font-semibold text-white mb-6">Mathematical Domain Performance</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full" id="domainTable">
+                    <thead>
+                        <tr class="border-b border-gray-800">
+                            <th class="text-left py-3 text-gray-400 font-medium">Crisis Domain</th>
+                            <th class="text-left py-3 text-gray-400 font-medium">Tier</th>
+                            <th class="text-left py-3 text-gray-400 font-medium">Accuracy</th>
+                            <th class="text-left py-3 text-gray-400 font-medium">Avg Time</th>
+                            <th class="text-left py-3 text-gray-400 font-medium">Impact</th>
+                        </tr>
+                    </thead>
+                    <tbody id="domainTableBody">
+                        <!-- Domain rows will be filled dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Final Message -->
+        <div class="bg-gradient-to-r from-gray-900/50 to-black/50 border border-gray-800 rounded-2xl p-8 mb-12 animate-fade-in-up" style="animation-delay: 1s">
+            <div class="flex items-center mb-6">
+                <div class="w-16 h-16 bg-gradient-to-br from-cyan-900 to-blue-900 rounded-full flex items-center justify-center mr-6">
+                    <i class="fas fa-satellite text-2xl text-cyan-300"></i>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-white">Transmission from AXIOM Command</h3>
+                    <p class="text-cyan-300">Global Response Network</p>
+                </div>
+            </div>
+            
+            <div class="border-l-4 border-cyan-500 pl-6 py-2 mb-6">
+                <p class="text-gray-300 text-lg leading-relaxed" id="commandMessage">
+                    "Your analytical interventions are being analyzed. Complete domains to see your impact assessment."
+                </p>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-6">
+                <p class="text-gray-400" id="closingStatement">
+                    The crisis response continues. Complete more mathematical domains to improve your standing in the AXIOM network.
+                </p>
+            </div>
+        </div>
+
+        <!-- Final Actions -->
+        <div class="text-center animate-fade-in-up" style="animation-delay: 1.2s">
+            <div class="flex flex-col md:flex-row justify-center gap-6 mb-8">
+                <button onclick="window.location.href='world-map.html'" 
+                        class="px-8 py-4 border border-gray-700 rounded-xl hover:bg-gray-800/50 transition">
+                    <i class="fas fa-globe mr-3"></i>Review Global Map
+                </button>
+                <button onclick="restartProtocol()" 
+                        class="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-semibold rounded-xl hover:opacity-90 transition">
+                    <i class="fas fa-redo mr-3"></i>Begin New Protocol
+                </button>
+                <button onclick="downloadReport()" 
+                        class="px-8 py-4 border border-gray-700 rounded-xl hover:bg-gray-800/50 transition">
+                    <i class="fas fa-download mr-3"></i>Download Full Report
+                </button>
+            </div>
+            
+            <p class="text-gray-500 text-sm">
+                All data encrypted and archived in the AXIOM vault. 
+                Your clearance level permits access to all future crisis responses.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Game State Manager
+        class AxiomGameState {
+            constructor() {
+                this.state = this.loadState();
+            }
+            
+            loadState() {
+                const saved = localStorage.getItem('axiom_player');
+                if (saved) return JSON.parse(saved);
+                
+                return {
+                    joined: new Date().toISOString(),
+                    stability: 100,
+                    completedDomains: [],
+                    currentDomain: null,
+                    currentQuestion: 1,
+                    performance: {},
+                    decisions: 0,
+                    correctDecisions: 0,
+                    totalTime: 0,
+                    rank: 'Analyst'
+                };
+            }
+            
+            getDomainAccuracy(domainId) {
+                if (!this.state.performance[domainId]) return 0;
+                const perf = this.state.performance[domainId];
+                return (perf.correct / perf.total) * 100;
+            }
+            
+            getGlobalAccuracy() {
+                if (this.state.decisions === 0) return 0;
+                return (this.state.correctDecisions / this.state.decisions) * 100;
+            }
+            
+            getAverageTime() {
+                if (this.state.decisions === 0) return 0;
+                return Math.floor(this.state.totalTime / this.state.decisions / 60); // in minutes
+            }
+            
+            reset() {
+                localStorage.removeItem('axiom_player');
+                this.state = this.loadState();
+                return this.state;
+            }
+        }
+
+        // Domain configuration
+        const domainConfig = {
+            'algebra': { tier: '🟢 Easy', color: 'green' },
+            'geometry': { tier: '🟢 Easy', color: 'blue' },
+            'calculus': { tier: '🟢 Easy', color: 'purple' },
+            'number-theory': { tier: '🟢 Easy', color: 'cyan' },
+            'probability': { tier: '🟡 Moderate', color: 'yellow' },
+            'discrete-math': { tier: '🟡 Moderate', color: 'indigo' },
+            'trigonometry': { tier: '🟡 Moderate', color: 'pink' },
+            'logic': { tier: '🟡 Moderate', color: 'orange' },
+            'applied-math': { tier: '🔴 Hard', color: 'red' },
+            'differential-equations': { tier: '🔴 Hard', color: 'red' },
+            'combinatorics': { tier: '🔴 Hard', color: 'amber' }
+        };
+
+        function formatDomainName(domain) {
+            return domain.split('-').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+        }
+
+        function calculateImpact(stability, accuracy) {
+            if (stability >= 85 && accuracy >= 90) return { text: 'Exceptional', color: 'text-emerald-400' };
+            if (stability >= 70 && accuracy >= 80) return { text: 'High', color: 'text-green-400' };
+            if (stability >= 50 && accuracy >= 70) return { text: 'Moderate', color: 'text-yellow-400' };
+            if (stability >= 30 && accuracy >= 60) return { text: 'Limited', color: 'text-orange-400' };
+            return { text: 'Minimal', color: 'text-red-400' };
+        }
+
+        function getCommandMessage(stability, accuracy, domainsCompleted) {
+            if (domainsCompleted === 0) {
+                return "Begin your mathematical intervention to see impact assessment.";
+            }
+            if (stability >= 80) {
+                return `Your analytical interventions prevented total systemic collapse in ${domainsCompleted} regions. Approximately <span class="text-white font-semibold">${Math.round(4700 * domainsCompleted)} people</span> were directly protected by your decisions. The mathematical frameworks you implemented are being archived as Protocol 2.8.`;
+            }
+            if (stability >= 60) {
+                return `Your decisions stabilized critical systems in ${domainsCompleted} regions. The mathematical interventions saved approximately <span class="text-white font-semibold">${Math.round(3200 * domainsCompleted)} people</span> from crisis escalation.`;
+            }
+            return `Your interventions contained damage in ${domainsCompleted} regions. Continue mathematical analysis to improve outcomes.`;
+        }
+
+        function getClosingStatement(stability) {
+            if (stability >= 80) {
+                return "The crisis has been contained. Core systems are stabilized. Your work demonstrates that mathematical reasoning, applied under pressure, can function as a strategic resource more valuable than any physical weapon. The AXIOM network remains active.";
+            }
+            if (stability >= 60) {
+                return "The crisis continues at reduced severity. Your interventions have bought time for recovery operations. Continue mathematical analysis to fully stabilize systems.";
+            }
+            return "The crisis response continues. Complete more mathematical domains to improve your standing in the AXIOM network and prevent further collapse.";
+        }
+
+        function loadFinalReport() {
+            const game = new AxiomGameState();
+            const state = game.state;
+            
+            // Update main stats
+            document.getElementById('finalRank').textContent = state.rank;
+            document.getElementById('finalStability').textContent = `${state.stability}%`;
+            document.getElementById('finalAccuracy').textContent = `${game.getGlobalAccuracy().toFixed(1)}%`;
+            
+            // Update metrics
+            const metricsContainer = document.getElementById('metricsContainer');
+            metricsContainer.innerHTML = `
+                <div class="bg-black/30 p-4 rounded-lg">
+                    <div class="text-gray-400 text-sm mb-2">Domains Secured</div>
+                    <div class="text-2xl font-bold text-white">${state.completedDomains.length}/11</div>
+                </div>
+                <div class="bg-black/30 p-4 rounded-lg">
+                    <div class="text-gray-400 text-sm mb-2">Total Decisions</div>
+                    <div class="text-2xl font-bold text-white">${state.decisions}</div>
+                </div>
+                <div class="bg-black/30 p-4 rounded-lg">
+                    <div class="text-gray-400 text-sm mb-2">Avg Response Time</div>
+                    <div class="text-2xl font-bold text-white">${game.getAverageTime()}m</div>
+                </div>
+                <div class="bg-black/30 p-4 rounded-lg">
+                    <div class="text-gray-400 text-sm mb-2">Crisis Duration</div>
+                    <div class="text-2xl font-bold text-white">${Math.round(state.decisions * 2.5)}h</div>
+                </div>
+            `;
+            
+            // Update regional impact
+            const regionalImpact = document.getElementById('regionalImpact');
+            const savedRegions = Math.max(1, Math.floor(state.stability / 10));
+            const lostRegions = Math.max(0, 11 - savedRegions - state.completedDomains.length);
+            
+            regionalImpact.innerHTML = `
+                <h3 class="text-2xl font-semibold text-white mb-6">Regional Impact Assessment</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="region-card saved rounded-xl p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h4 class="text-xl font-semibold text-white">Stabilized Regions</h4>
+                                <p class="text-green-400">${savedRegions} regions secured from collapse</p>
+                            </div>
+                            <div class="text-3xl text-green-400">
+                                <i class="fas fa-shield-check"></i>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            ${state.completedDomains.slice(0, 3).map(domain => `
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">${formatDomainName(domain)}</span>
+                                    <span class="font-mono text-white">+${Math.floor(Math.random() * 20 + 15)}% stability</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="region-card lost rounded-xl p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h4 class="text-xl font-semibold text-white">Compromised Regions</h4>
+                                <p class="text-red-400">${lostRegions} regions at risk</p>
+                            </div>
+                            <div class="text-3xl text-red-400">
+                                <i class="fas fa-triangle-exclamation"></i>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            ${lostRegions > 0 ? `
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Pending Domains</span>
+                                    <span class="font-mono text-red-400">${11 - state.completedDomains.length} remaining</span>
+                                </div>
+                            ` : `
+                                <div class="text-gray-400 italic">All accessible regions stabilized</div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Update domain table
+            const domainTableBody = document.getElementById('domainTableBody');
+            domainTableBody.innerHTML = '';
+            
+            // Add completed domains first
+            state.completedDomains.forEach(domain => {
+                const accuracy = game.getDomainAccuracy(domain);
+                const config = domainConfig[domain] || { tier: '🟢 Easy', color: 'gray' };
+                const impact = calculateImpact(state.stability, accuracy);
+                const avgTime = state.performance[domain]?.time ? 
+                    Math.floor(state.performance[domain].time / state.performance[domain].total / 60) : 0;
+                
+                domainTableBody.innerHTML += `
+                    <tr class="border-b border-gray-900/50">
+                        <td class="py-4">${formatDomainName(domain)}</td>
+                        <td class="py-4">
+                            <span class="px-3 py-1 bg-${config.color}-900/30 text-${config.color}-400 rounded-full text-sm">
+                                ${config.tier}
+                            </span>
+                        </td>
+                        <td class="py-4">
+                            <div class="flex items-center">
+                                <div class="w-24 bg-gray-800 rounded-full h-2 mr-3">
+                                    <div class="bg-${config.color}-500 h-2 rounded-full progress-fill" 
+                                         style="width: ${accuracy}%"></div>
+                                </div>
+                                <span class="font-mono">${accuracy.toFixed(1)}%</span>
+                            </div>
+                        </td>
+                        <td class="py-4 font-mono">${avgTime}m</td>
+                        <td class="py-4 ${impact.color}">${impact.text}</td>
+                    </tr>
+                `;
+            });
+            
+            // Add remaining domains as locked
+            const allDomains = Object.keys(domainConfig);
+            const remainingDomains = allDomains.filter(d => !state.completedDomains.includes(d));
+            
+            remainingDomains.forEach(domain => {
+                const config = domainConfig[domain] || { tier: '🟢 Easy', color: 'gray' };
+                domainTableBody.innerHTML += `
+                    <tr class="border-b border-gray-900/50 opacity-50">
+                        <td class="py-4 text-gray-500">${formatDomainName(domain)}</td>
+                        <td class="py-4">
+                            <span class="px-3 py-1 bg-gray-900/30 text-gray-500 rounded-full text-sm">
+                                ${config.tier}
+                            </span>
+                        </td>
+                        <td class="py-4">
+                            <div class="flex items-center">
+                                <div class="w-24 bg-gray-900 rounded-full h-2 mr-3">
+                                    <div class="bg-gray-700 h-2 rounded-full" style="width: 0%"></div>
+                                </div>
+                                <span class="font-mono text-gray-500">--%</span>
+                            </div>
+                        </td>
+                        <td class="py-4 font-mono text-gray-500">--m</td>
+                        <td class="py-4 text-gray-500">Locked</td>
+                    </tr>
+                `;
+            });
+            
+            // Update command message
+            document.getElementById('commandMessage').innerHTML = getCommandMessage(
+                state.stability, 
+                game.getGlobalAccuracy(), 
+                state.completedDomains.length
+            );
+            
+            // Update closing statement
+            document.getElementById('closingStatement').textContent = getClosingStatement(state.stability);
+            
+            // Add celebration for high scores
+            if (state.stability >= 80) {
+                triggerCelebration();
+            }
+            
+            // Animate progress bars
+            setTimeout(() => {
+                document.querySelectorAll('.progress-fill').forEach(bar => {
+                    bar.style.transition = 'width 1.5s ease';
+                });
+            }, 100);
+        }
+        
+        function restartProtocol() {
+            if (confirm("Reset all progress and begin a new crisis response protocol?")) {
+                const game = new AxiomGameState();
+                game.reset();
+                window.location.href = 'index.html';
+            }
+        }
+        
+        function downloadReport() {
+            const game = new AxiomGameState();
+            const state = game.state;
+            
+            const report = `
+AXIOM: Protocol of Survival - Crisis Assessment Report
+=======================================================
+Generated: ${new Date().toLocaleString()}
+Agent Rank: ${state.rank}
+Global Stability: ${state.stability}%
+Decision Accuracy: ${game.getGlobalAccuracy().toFixed(1)}%
+Domains Completed: ${state.completedDomains.length}/11
+Total Decisions: ${state.decisions}
+Average Response Time: ${game.getAverageTime()} minutes
+
+DOMAIN PERFORMANCE:
+${state.completedDomains.map(domain => {
+    const accuracy = game.getDomainAccuracy(domain);
+    return `• ${formatDomainName(domain)}: ${accuracy.toFixed(1)}% accuracy`;
+}).join('\n')}
+
+SUMMARY:
+${getCommandMessage(state.stability, game.getGlobalAccuracy(), state.completedDomains.length).replace(/<[^>]*>/g, '')}
+            `;
+            
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `axiom-report-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert("Report downloaded. Check your downloads folder.");
+        }
+        
+        function triggerCelebration() {
+            const colors = ['#00f0ff', '#7b61ff', '#10b981', '#ffb443'];
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.cssText = `
+                        position: fixed;
+                        width: 10px;
+                        height: 10px;
+                        background: ${colors[Math.floor(Math.random() * colors.length)]};
+                        border-radius: 50%;
+                        top: -20px;
+                        left: ${Math.random() * 100}vw;
+                        z-index: 9999;
+                        pointer-events: none;
+                    `;
+                    document.body.appendChild(confetti);
+                    
+                    const animation = confetti.animate([
+                        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                        { transform: `translateY(${window.innerHeight + 100}px) rotate(${360 + Math.random() * 360}deg)`, opacity: 0 }
+                    ], {
+                        duration: 3000 + Math.random() * 2000,
+                        easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
+                    });
+                    
+                    animation.onfinish = () => confetti.remove();
+                }, i * 100);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadFinalReport);
+    </script>
+</body>
+</html>
